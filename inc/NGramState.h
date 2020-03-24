@@ -16,10 +16,10 @@ class NGramState {
 
 public:
     NGramState(const NGram<type, n>& parent, const Gram<type, n>& gram)
-            : parent(parent), current_gram_ptr(&gram) {}
+		: parent(parent), current_gram_ptr(&gram) {}
 
     NGramState(const NGramState& rh)
-            : parent(rh.parent), current_gram_ptr(rh.current_gram_ptr) {}
+		: parent(rh.parent), current_gram_ptr(rh.current_gram_ptr) {}
 
 	NGramState& operator=(const NGramState& r) {
         new(this) NGramState(r);
@@ -29,9 +29,6 @@ public:
     bool advance() {
 		try{
 			auto next = &parent.getContinuationsFor(*current_gram_ptr).getWeightedContinuationGram();
-			std::cout << next << ' ';
-			if((next) == decltype(next)(0x1))
-				std::cout << "gotem";
 			current_gram_ptr = next;
 			return true;
 		}catch(NoGramContinuationException){

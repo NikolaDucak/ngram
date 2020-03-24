@@ -2,7 +2,6 @@
 
 #include <map>
 #include <vector>
-#include <iostream>
 #include <random>
 
 #include "Gram.h"
