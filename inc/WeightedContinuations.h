@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 #include <random>
 
 #include "Gram.h"
@@ -20,21 +21,22 @@ public:
     const Gram_t& getWeightedContinuationGram() const {
         static std::mt19937_64 engine;
         std::vector<int> probabilities;
+		
+		if(continuations.size() == 0){
+            throw NoGramContinuationException("gram has no continuations ");
+		}else if(continuations.size() == 1){
+			return *continuations.begin()->first;
+		}
+
         for (const auto& pair : continuations) {
             probabilities.push_back(pair.second);
         }
-        if (probabilities.empty()) {
-            throw NoGramContinuationException("gram has no continuations ");
-        }
-
         static std::discrete_distribution<int> dist(probabilities.begin(), probabilities.end());
         int iterator_offset = dist(engine);
-
-        return *(
-			(
-				*std::next(continuations.begin(), iterator_offset)
-			).first
-		);
+		
+		// selected continuation	
+		auto cont_prob_pair = (std::next(continuations.begin(), iterator_offset));
+        return *cont_prob_pair->first;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const WeightedContinuations& a) {

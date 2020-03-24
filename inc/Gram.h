@@ -19,11 +19,7 @@ struct Gram {
     }
 
     friend bool operator==(const Gram& left, const Gram& right) {
-        for (int i = 0; i < n; i++) {
-            if (left.items[i] != right.items[i])
-                return false;
-        }
-        return true;
+        return left.items == right.items;
     }
 };
 #endif

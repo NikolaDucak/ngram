@@ -13,21 +13,18 @@
 template<typename type>
 struct LookUpGram{
 	int *items;
-	int n;
-
-	LookUpGram(unsigned n) : n(n){
-		items = new int[n];
-	}
+	int n; 
+	LookUpGram(unsigned n) : n(n){ items = new int[n]; }
 };
 
 template<typename type, size_t n>
 class NGram {
-    /*shorten template type names*/
+    /*shorter template type names*/
     using Gram_t = Gram<type, n>;
     using NGramState_t = NGramState<type, n>;
     using WeightedContinuations_t = WeightedContinuations<type, n>;
 
-    std::unordered_map<const Gram_t, WeightedContinuations_t, GramHasher<type, n>> map;
+    std::unordered_map<Gram_t, WeightedContinuations_t, GramHasher<type, n>> map;
     std::set<type> items;
 
     friend NGramState_t;
@@ -54,7 +51,8 @@ public:
     }
 
 	std::vector<NGramState_t> getState( LookUpGram<type> search) const {
-		if( search.n > n ) throw std::out_of_range("lookup gram has too many items");//todo: myb custom exception
+		if( search.n > n ) 
+			throw std::out_of_range("lookup gram has too many items");//todo: myb custom exception
 		std::vector<NGramState_t> matching_states;
 		for(const auto& item : map){
 			bool matches = true;
@@ -69,13 +67,18 @@ public:
 	}
 
 private:
-    Gram_t createGram(typename std::vector<type>::iterator it) {
-        Gram_t g{};
+    Gram_t createGram(const typename std::vector<type>::iterator& it) {
+        Gram_t g;
         for (int i = 0; i < n; i++) {
             g.items[i] = get_pointer_to_item_in_set(*(it + i));
         }
         return g;
 	}
+
+    const type* get_pointer_to_item_in_set(type& item) {
+        auto insertion_result = items.insert(item);
+        return &(*insertion_result.first);
+    }
 
 	const WeightedContinuations_t getContinuationsFor(const Gram_t& g) const {
 		return map.at(g);
@@ -84,11 +87,6 @@ private:
     const Gram_t& get_refrence_to_gram_in_map(Gram_t g) {
         auto insertion = map.insert(std::make_pair(g, WeightedContinuations_t()));
         return (*insertion.first).first;
-    }
-
-    const type* get_pointer_to_item_in_set(type & item) {
-        auto insertion_result = items.insert(item);
-        return &(*insertion_result.first);
     }
 };
 

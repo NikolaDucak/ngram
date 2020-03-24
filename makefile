@@ -21,5 +21,7 @@ all: $(OBJECT_FILES)
 	@mkdir -p $(BUILD_DIRECTORY)
 	$(COMPILER) $(OBJECT_FILES) -o $(BUILD_DIRECTORY)/$(PROGRAM_NAME) 
 
+debug: $(OBJECT_FILES) 
+	g++ src/*.cpp -g
 clean:
 	-rm $(OBJECT_DIRECTORY)/*.o

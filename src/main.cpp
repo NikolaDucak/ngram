@@ -8,14 +8,13 @@ void sanitize(std::string& str){
 	std::transform(str.begin(), str.end(), str.begin(), 
 		[](char c) { return std::tolower(c); } );
 	str.erase(std::remove_if(str.begin(), str.end(), 
-		[](char c) { return !std::isalpha(c); } ), str.end());
+		[](char c) { return !std::isalnum(c); } ), str.end());
 }
 
 std::vector<std::string> file_to_vector(const char* file_path){
 	std::ifstream file(file_path);
 	if( !file.is_open() ){
-		std::cout << "cant load file";
-		return std::vector<std::string>();
+		throw std::runtime_error("cant load file");
 	}
 
 	std::vector<std::string> sequence;
@@ -31,13 +30,13 @@ int file(){
 	auto s = file_to_vector("sample_text.txt");
 	std::cout << "file read"<<std::endl;
 	static const NGram<std::string, 3> ngram(s);
-	static auto state = ngram.getRandomState();
 	std::cout << "Distinct items: "<< ngram.getItems().size() << '\n';
 	
+	static auto state = ngram.getRandomState();
 	for(int i = 0; i < 30; i++){
-		std::cout << state[0] << ' ';
+		std::cout << state[0] << ' ' << std::flush;
 		if(!state.advance())
-			state = ngram.getRandomState();
+			break;
 	}
 	return 0;
 }
