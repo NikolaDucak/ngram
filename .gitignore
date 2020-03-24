@@ -1,3 +1,4 @@
 #ignore build and object file dirs
 obj/
 build/
+*.swp
