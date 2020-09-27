@@ -23,5 +23,6 @@ all: $(OBJECT_FILES)
 
 debug: $(OBJECT_FILES) 
 	g++ src/*.cpp -g
+
 clean:
 	-rm $(OBJECT_DIRECTORY)/*.o

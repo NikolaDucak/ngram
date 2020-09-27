@@ -4,11 +4,12 @@
 #include <exception>
 #include <string>
 
-class NoGramContinuationException : public std::exception{
-	std::string msg;
+class NoGramContinuationException : public std::exception {
+    std::string msg;
+
 public:
-	NoGramContinuationException(std::string msg) : msg(msg){}
-	virtual const char * what() const throw (){ return msg.c_str(); }
+    NoGramContinuationException(std::string msg) : msg(msg) {}
+    virtual const char* what() const throw() { return msg.c_str(); }
 };
 
 #endif
